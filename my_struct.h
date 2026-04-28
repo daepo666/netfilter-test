@@ -1,7 +1,6 @@
 #include<stdint.h>
 #include<arpa/inet.h>
-void translate_ipv4(const uint8_t *pointer, tcp_ipv4 *my_tcp_ipv4);
-void translate_ipv6(const uint8_t *pointer, tcp_ipv6 *my_tcp_ipv6);
+
 typedef struct ethernet_header {
     uint8_t dst_MAC [6];
     uint8_t src_MAC [6];
