@@ -77,6 +77,10 @@ static uint32_t print_pkt (struct nfq_data *tb)
 	
 int bad_or_not (uint8_t * http, uint64_t http_len, const char * bad_host){
 	const char * recvuntil = "Host: ";
+	if (http_len < 6){
+		return 0;
+	}
+    
 	int i,j = 0;
 	for(i = 0 ; i<=http_len - 6; i++){
 		if(memcmp(http +i, recvuntil, 6) !=0){
@@ -129,6 +133,9 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
 	//tcp is struct pointer, so + calculation may be undesired val
 	uint8_t *start_http = (uint8_t *)(pkt + ip_len+ tcp_len);
 	uint64_t http_len = pkt_len - ip_len - tcp_len;
+	if (http_len < 6){
+    	return nfq_set_verdict(qh, id, NF_ACCEPT, 0, NULL);
+	}
 	if(bad_or_not(start_http, http_len, bad_host)){
 		printf("drop bad host: %s\n", bad_host);
 		return nfq_set_verdict(qh, id, NF_DROP, 0, NULL);
