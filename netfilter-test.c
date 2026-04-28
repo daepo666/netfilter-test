@@ -75,8 +75,8 @@ static uint32_t print_pkt (struct nfq_data *tb)
 	return id;
 }
 	
-int bad_or_not (uint8_t * http, uint64_t http_len, uint8_t * bad_host){
-	char * recvuntil = "Host: ";
+int bad_or_not (uint8_t * http, uint64_t http_len, const char * bad_host){
+	const char * recvuntil = "Host: ";
 	int i,j = 0;
 	for(i = 0 ; i<=http_len - 6; i++){
 		if(memcmp(http +i, recvuntil, 6) !=0){
@@ -102,7 +102,7 @@ int bad_or_not (uint8_t * http, uint64_t http_len, uint8_t * bad_host){
 
 
 static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
-	      struct nfq_data *nfa, const char *data)
+	      struct nfq_data *nfa, void *data)
 {	
 	//bad host
 	uint32_t id = print_pkt(nfa);
